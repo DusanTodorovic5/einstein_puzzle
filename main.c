@@ -1,7 +1,8 @@
-#include <stdio.h>
+#include "defs.h"
 
 int main(int, char**) {
-   printf("Hello, world!\n");
+   concepts* m_concepts;
+   load_from_file("test_file.txt", &m_concepts);
 
    return 0;
 }
