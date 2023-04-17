@@ -42,7 +42,7 @@ typedef struct concepts_t {
 
 /*
  *
- * LOADING FROM FILE FUNCTIONS DEFINITIONS
+ * FUNCTIONS DEFINITIONS FOR LOADING FROM FILE 
  * 
 */
 
@@ -50,7 +50,7 @@ typedef struct concepts_t {
 /// @param filename Name of file to load concepts from
 /// @param concept Concept reference, structure in which the concepts will be stored
 /// @return Returns error code or SUCCESS
-error_code load_from_file(const char* filename, concepts** concept);
+error_code load(concepts** concept, const char* filename);
 
 /// @brief Loads the number of concept groups
 /// @param file_handle Pointer to the opened file

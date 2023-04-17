@@ -1,6 +1,6 @@
 #include "defs.h"
 
-error_code load_from_file(const char* filename, concepts** concept) {
+error_code load(concepts** concept, const char* filename) {
     FILE *file_handle = fopen(filename, "r");
 
     if (file_handle == NULL) {
