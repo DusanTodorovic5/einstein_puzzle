@@ -19,6 +19,13 @@ typedef enum error_code_e {
     FILE_FORMAT_ERROR = 2
 } error_code;
 
+/// @brief Types of tree printing
+typedef enum print_type_e {
+    HORIZONTAL = 0,
+    VERTICAL = 1
+} print_type;
+
+/// @brief Simple utility structure containing two unsigned chars
 typedef struct pair_t {
     unsigned char first;
     unsigned char second;
@@ -46,6 +53,7 @@ typedef struct concepts_t {
     relationship* relationships;
 } concepts;
 
+/// @brief Tree node structure containing table of concepts and pointer to children
 typedef struct node_t {
     pair** table;
     node** children; 
@@ -128,6 +136,8 @@ pair index_from_string(char* string, concepts* data);
  * 
 */
 
+void populate(node** root);
+void print(node* root, print_type type);
 
 
 #endif
