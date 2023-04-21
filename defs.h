@@ -76,4 +76,21 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
 /// @return Returns NULL in case of an error, otherwise it returns array of relationships that is NULL terminated
 relationship* load_relationships(FILE* file_handle);
 
+
+/*
+ *
+ * CONVERSIONS
+ * 
+*/
+
+/// @brief Returns the relationship type corresponding to symbol
+/// @param symbol Character of type, can be + or -
+/// @return Returns PAIRED in case of +, NOT_PAIRED in case of - and UKNOWN in rest of cases
+relationship_type char_to_relationship_type(char symbol);
+
+/// @brief Returns the character corresponding to relationship type
+/// @param type Relationship type
+/// @return Returns + in case of PAIRED, - in case of NOT_PAIRED and \0 in case of UKNOWN
+char relationship_type_to_char(relationship_type type);
+
 #endif

@@ -56,7 +56,7 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
 
             if (ret != 1) {
                 free(group);
-                return NULL;
+                return all_concepts;
             }
 
             size_t len = strlen(temp);
@@ -70,7 +70,7 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
         ret = fscanf(file_handle, "%s", temp);
         if (ret != 1) {
             free(group);
-            return NULL;
+            return all_concepts;
         }
         size_t len = strlen(temp);
 
@@ -85,5 +85,27 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
 }
 
 relationship* load_relationships(FILE* file_handle) {
-    return NULL;
+    char left[128];
+    char symbol;
+    char right[128];
+
+    relationship* relationships = NULL;
+
+    for (int i=0;fscanf(file_handle, "%s %c %s", left, &symbol, right) != -1;i++) {
+        relationships = (relationship*)(relationships ?
+            realloc(relationships, sizeof(relationship) * (i + 1)) :
+            malloc(sizeof(relationship))
+        );
+
+        relationships[i].type = char_to_relationship_type(symbol);
+        relationships[i].left_concept = (char*)malloc(sizeof(char) * (strlen(left) + 1));
+        strcpy(relationships[i].left_concept, left);
+        relationships[i].left_concept[strlen(left)] = '\0';
+
+        relationships[i].right_concept = (char*)malloc(sizeof(char) * (strlen(right) + 1));
+        strcpy(relationships[i].right_concept, right);
+        relationships[i].right_concept[strlen(right)] = '\0';
+    }
+
+    return relationships;
 }
