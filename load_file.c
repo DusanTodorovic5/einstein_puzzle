@@ -84,7 +84,7 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
     return all_concepts;
 }
 
-relationship* load_relationships(FILE* file_handle) {
+relationship* load_relationships(FILE* file_handle, concepts* data) {
     char left[128];
     char symbol;
     char right[128];
@@ -98,13 +98,13 @@ relationship* load_relationships(FILE* file_handle) {
         );
 
         relationships[i].type = char_to_relationship_type(symbol);
-        relationships[i].left_concept = (char*)malloc(sizeof(char) * (strlen(left) + 1));
-        strcpy(relationships[i].left_concept, left);
-        relationships[i].left_concept[strlen(left)] = '\0';
+        relationships[i].left = index_from_string(left, data);
+        relationships[i].right = index_from_string(right, data);
 
-        relationships[i].right_concept = (char*)malloc(sizeof(char) * (strlen(right) + 1));
-        strcpy(relationships[i].right_concept, right);
-        relationships[i].right_concept[strlen(right)] = '\0';
+        if (relationships[i].left.first == -1 || relationships[i].right.first == -1) {
+            free(relationships);
+            return NULL;
+        }
     }
 
     return relationships;

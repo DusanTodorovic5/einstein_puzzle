@@ -19,6 +19,11 @@ typedef enum error_code_e {
     FILE_FORMAT_ERROR = 2
 } error_code;
 
+typedef struct pair_t {
+    unsigned char first;
+    unsigned char second;
+} pair;
+
 /// @brief Relationship type enumeratable
 typedef enum relationship_type_t {
     PAIRED = 0,
@@ -26,10 +31,10 @@ typedef enum relationship_type_t {
     UKNOWN
 } relationship_type;
 
-/// @brief Relationship structure of a concept, contains the name of left and right concept as well as relationship between them
+/// @brief Relationship structure of a concept, contains the index of left and right concept as well as relationship between them
 typedef struct relationship_t {
-    char* left_concept;
-    char* right_concept;
+    pair left;
+    pair right;
     relationship_type type;
 } relationship;
 
@@ -41,9 +46,14 @@ typedef struct concepts_t {
     relationship* relationships;
 } concepts;
 
+typedef struct node_t {
+    pair** table;
+    node** children; 
+} node;
+
 /*
  *
- * FUNCTIONS DEFINITIONS FOR LOADING CONCEPTS
+ * LOADING CONCEPTS
  * 
 */
 
@@ -73,8 +83,9 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
 
 /// @brief Loads concept's relationships from given file
 /// @param file_handle Pointer to the opened file
+/// @param data Pointer to concepts structure containing data
 /// @return Returns NULL in case of an error, otherwise it returns array of relationships that is NULL terminated
-relationship* load_relationships(FILE* file_handle);
+relationship* load_relationships(FILE* file_handle, concepts* data);
 
 
 /*
@@ -92,5 +103,31 @@ relationship_type char_to_relationship_type(char symbol);
 /// @param type Relationship type
 /// @return Returns + in case of PAIRED, - in case of NOT_PAIRED and \0 in case of UKNOWN
 char relationship_type_to_char(relationship_type type);
+
+/*
+ *
+ * TABLE/MAP OPERATIONS
+ * 
+*/
+
+/// @brief Returns pointer to the string on given index inside concepts structure
+/// @param index Location of desired string
+/// @param data Structure containing concepts
+/// @return Returns the pointer to the string. SHOULD NOT BE FREED.
+char* string_from_index(pair index, concepts* data);
+
+/// @brief Returns the location of given string inside concepts structure
+/// @param string Desired string
+/// @param data Structure containing concepts
+/// @return Returns the location of string or {-1,-1} if its non-existent
+pair index_from_string(char* string, concepts* data);
+
+/*
+ *
+ * NODE OPERATIONS
+ * 
+*/
+
+
 
 #endif
