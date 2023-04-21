@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /// @brief Return function error codes
 typedef enum error_code_e {
@@ -42,7 +43,7 @@ typedef struct concepts_t {
 
 /*
  *
- * FUNCTIONS DEFINITIONS FOR LOADING FROM FILE 
+ * FUNCTIONS DEFINITIONS FOR LOADING CONCEPTS
  * 
 */
 
@@ -50,7 +51,10 @@ typedef struct concepts_t {
 /// @param filename Name of file to load concepts from
 /// @param concept Concept reference, structure in which the concepts will be stored
 /// @return Returns error code or SUCCESS
-error_code load(concepts** concept, const char* filename);
+error_code load_file(concepts** concept, char* filename);
+
+/// @brief Loads concepts data from stdin and stores it in concept parameter. Returns error code
+error_code load(concepts** concept);
 
 /// @brief Loads the number of concept groups
 /// @param file_handle Pointer to the opened file
@@ -65,7 +69,7 @@ int load_number_of_concepts(FILE* file_handle);
 /// @brief Loads concepts from a given file
 /// @param file_handle Pointer to the opened file
 /// @return Returns NULL in case of an error, otherwise it returns 2D array containing concepts
-char** load_concepts(FILE* file_handle);
+char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_handle);
 
 /// @brief Loads concept's relationships from given file
 /// @param file_handle Pointer to the opened file

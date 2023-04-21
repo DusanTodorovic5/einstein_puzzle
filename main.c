@@ -2,7 +2,7 @@
 
 int main(int, char**) {
    concepts* m_concepts;
-   load("test_file.txt", &m_concepts);
+   load_file(&m_concepts, "test_file.txt");
 
    return 0;
 }
