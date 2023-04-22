@@ -18,7 +18,7 @@ error_code load_file(concepts** concept, char* filename) {
         file_handle
     );
 
-    (*concept)->relationships = load_relationships(file_handle);
+    (*concept)->relationships = load_relationships(file_handle, *concept);
 
     fclose(file_handle);
 

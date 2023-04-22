@@ -27,8 +27,8 @@ typedef enum print_type_e {
 
 /// @brief Simple utility structure containing two unsigned chars
 typedef struct pair_t {
-    char first;
-    char second;
+    int first;
+    int second;
 } pair;
 
 /// @brief Relationship type enumeratable
@@ -55,10 +55,11 @@ typedef struct concepts_t {
 
 /// @brief Tree node structure containing table of concepts and pointer to children
 typedef struct node_t {
-    unsigned char row_size;
-    unsigned char col_size;
-    unsigned char children_size;
-    char** table;
+    int row_size;
+    int col_size;
+    int children_size;
+    int level;
+    int** table;
     struct node_t** children; 
 } node;
 
@@ -70,8 +71,8 @@ typedef struct linked_node_t {
 
 /// @brief Contains the queue of indexes for avaliable relationships
 typedef struct linked_relationship_t {
-    char row;
-    char col;
+    int row;
+    int col;
     struct linked_relationship_t* next;
 } linked_relationship;
 
@@ -163,6 +164,10 @@ node* populate(concepts* data);
 /// @param root Pointer to the first node to be printed
 /// @param type Printing type, horizontal or vertical
 void print(node* root, print_type type);
+
+/// @brief Prints the node in 1 line
+/// @param root node to be printed
+void print_node(node* root);
 
 /// @brief Copies the given node and returns pointer to new node without copying the children
 /// @param src Node to be copied

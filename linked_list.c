@@ -29,7 +29,9 @@ node* pop_back(linked_node** list) {
         linked_node* pre_last = *list;
         
         // get the element before last element
-        while ((pre_last = (*list)->next)->next->next);
+        while (pre_last->next->next != NULL) {
+            pre_last = pre_last->next;
+        }
 
         linked_node* last = pre_last->next;
         pre_last->next = NULL;
@@ -82,7 +84,6 @@ pair pop_relationship(linked_relationship** list) {
 
     linked_relationship* first = *list;
 
-    pair ret_index;
     ret_index.first = first->row;
     ret_index.second = first->col;
 

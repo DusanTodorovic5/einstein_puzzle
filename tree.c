@@ -8,6 +8,10 @@ node* populate(concepts* data) {
 
     current->table = (pair**)malloc(sizeof(pair*) * data->number_of_groups);
     current->children = NULL;
+    current->children_size = 0;
+    current->row_size = data->number_of_groups;
+    current->col_size = data->number_of_concepts;
+    current->level = 0;
     // root table initialization
     for (int i=0;i<data->number_of_groups;i++) {
         current->table[i] = (pair*)malloc(sizeof(pair) * data->number_of_concepts);
@@ -26,7 +30,8 @@ node* populate(concepts* data) {
     do {
         linked_relationship* relationships = get_avaliable_relationships(current, data);
 
-        pair avaliable_relationship = pop_relationship(relationships);
+        pair avaliable_relationship = pop_relationship(&relationships);
+
         int child_index = 0;
         while (avaliable_relationship.first != -1) {
              for (int i = 0;i < data->number_of_concepts;i++) {
@@ -38,13 +43,14 @@ node* populate(concepts* data) {
                     }
 
                     current->children[child_index] = copy_node(current);
+                    current->children[child_index]->level++;
                     current->children[child_index]->table[avaliable_relationship.first][i] = avaliable_relationship.second;
                     
                     push(&queue, current->children[child_index++]);
                 }
              }
 
-            avaliable_relationship = pop_relationship(relationships);
+            avaliable_relationship = pop_relationship(&relationships);
         }
     } while ((current = pop_back(&queue)));
 
@@ -52,7 +58,34 @@ node* populate(concepts* data) {
 }
 
 void print(node* root, print_type type) {
+    node* current = root;
+    linked_node* stack = NULL;
 
+    push(&stack, current);
+
+    while (stack) {
+        current = pop(&stack);
+
+        for (int i=0;i<current->level;i++) {
+            printf("\t");
+        }
+
+        print_node(current);
+
+        for (int i=0;i<current->children_size;i++) {
+            push(&stack, current->children[i]);
+        }
+    }
+}
+
+void print_node(node* root) {
+    for (int i=0;i<root->row_size;i++) {
+        for (int j=0;j<root->col_size;j++) {
+            printf("%d ", root->table[i][j]);
+        }
+        printf(" | ");
+    }
+    printf("%d", root->children_size);
 }
 
 node* copy_node(node* src) {
@@ -65,6 +98,8 @@ node* copy_node(node* src) {
     dst->children = NULL;
     dst->row_size = src->row_size;
     dst->col_size = src->col_size;
+    dst->level = src->level;
+    dst->children_size = 0;
 
     dst->table = (char**)malloc(sizeof(char*) * dst->row_size);
     for (int i=0;i<dst->row_size;i++) {
