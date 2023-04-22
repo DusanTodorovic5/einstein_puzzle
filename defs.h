@@ -167,16 +167,16 @@ node* copy_node(node* src);
 /// @brief Pops the first element in list, acts as stack
 /// @param list List on which the operation will be executed
 /// @return Returns the popped node
-node* pop(linked_node* list);
+node* pop(linked_node** list);
 
 /// @brief Removes the last node in list, acts as queue
 /// @param list List on which the operation will be executed
 /// @return Returns the removed node
-node* remove(linked_node* list);
+node* remove(linked_node** list);
 
 /// @brief Pushes the node at the start of the list
 /// @param list List on which the operation will be executed
-void push(linked_node** list);
+void push(linked_node** list, node* data);
 
 /// @brief Deletes the linked list and all of it nodes. Frees up memory
 /// @param list List on which the delete will be executed
