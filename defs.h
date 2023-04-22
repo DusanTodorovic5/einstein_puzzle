@@ -55,6 +55,8 @@ typedef struct concepts_t {
 
 /// @brief Tree node structure containing table of concepts and pointer to children
 typedef struct node_t {
+    unsigned char row_size;
+    unsigned char col_size;
     pair** table;
     node** children; 
 } node;
@@ -136,8 +138,20 @@ pair index_from_string(char* string, concepts* data);
  * 
 */
 
-void populate(node** root);
+/// @brief Creates decision tree and returns pointer to the root of a tree
+/// @param data Concepts which will be taken in consideration
+/// @return pointer to the root of a tree
+node* populate(concepts* data);
+
+/// @brief Prints the tree from node given as root, either as horizontal(check windows TREE command) or vertically
+/// @param root Pointer to the first node to be printed
+/// @param type Printing type, horizontal or vertical
 void print(node* root, print_type type);
+
+/// @brief Copies the given node and returns pointer to new node without copying the children
+/// @param src Node to be copied
+/// @return Copied node
+node* copy_node(node* src);
 
 
 #endif
