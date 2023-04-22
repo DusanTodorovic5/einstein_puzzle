@@ -6,7 +6,7 @@ node* populate(concepts* data) {
     node* current = (node*)malloc(sizeof(node));
     node* root = current;
 
-    current->table = (pair**)malloc(sizeof(pair*) * data->number_of_groups);
+    current->table = (int**)malloc(sizeof(int*) * data->number_of_groups);
     current->children = NULL;
     current->children_size = 0;
     current->row_size = data->number_of_groups;
@@ -14,7 +14,7 @@ node* populate(concepts* data) {
     current->level = 0;
     // root table initialization
     for (int i=0;i<data->number_of_groups;i++) {
-        current->table[i] = (pair*)malloc(sizeof(pair) * data->number_of_concepts);
+        current->table[i] = (int*)malloc(sizeof(int) * data->number_of_concepts);
         
         for (int j=0;j<data->number_of_concepts;j++) {
             if (i) {
@@ -101,9 +101,9 @@ node* copy_node(node* src) {
     dst->level = src->level;
     dst->children_size = 0;
 
-    dst->table = (char**)malloc(sizeof(char*) * dst->row_size);
+    dst->table = (int**)malloc(sizeof(int*) * dst->row_size);
     for (int i=0;i<dst->row_size;i++) {
-        dst->table[i] = (char*)malloc(sizeof(char) * dst->col_size);
+        dst->table[i] = (int*)malloc(sizeof(int) * dst->col_size);
 
         memcpy(dst->table[i], src->table[i], dst->col_size);
     }
