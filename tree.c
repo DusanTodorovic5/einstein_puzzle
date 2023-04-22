@@ -34,7 +34,7 @@ node* populate(concepts* data) {
 
         int child_index = 0;
         while (avaliable_relationship.first != -1) {
-             for (int i = 0;i < data->number_of_concepts;i++) {
+            for (int i = 0;i < data->number_of_concepts;i++) {
                 if (current->table[avaliable_relationship.first][i] == -1) {
                     if (current->children) {
                         current->children = (node**)realloc(current->children, sizeof(node*) * (child_index + 1));
@@ -48,10 +48,11 @@ node* populate(concepts* data) {
                     
                     push(&queue, current->children[child_index++]);
                 }
-             }
+            }
 
             avaliable_relationship = pop_relationship(&relationships);
         }
+        current->children_size = child_index;
     } while ((current = pop_back(&queue)));
 
     return root;
@@ -71,6 +72,7 @@ void print(node* root, print_type type) {
         }
 
         print_node(current);
+        printf("\n");
 
         for (int i=0;i<current->children_size;i++) {
             push(&stack, current->children[i]);
@@ -105,7 +107,7 @@ node* copy_node(node* src) {
     for (int i=0;i<dst->row_size;i++) {
         dst->table[i] = (int*)malloc(sizeof(int) * dst->col_size);
 
-        memcpy(dst->table[i], src->table[i], dst->col_size);
+        memcpy(dst->table[i], src->table[i], sizeof(int) * dst->col_size);
     }
 
     return dst;
