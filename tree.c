@@ -1,7 +1,7 @@
 #include "defs.h"
 
 node* populate(concepts* data) {
-
+    
 }
 
 void print(node* root, print_type type) {
