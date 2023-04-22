@@ -1,7 +1,10 @@
 #include "defs.h"
 
 char* string_from_index(pair index, concepts* data) {
-    if (index.first < data->number_of_groups && index.first < data->number_of_concepts) {
+    if (index.first < data->number_of_groups && 
+        index.second < data->number_of_concepts &&
+        index.second > -1 &&
+        index.first > -1) {
         return data->concepts[index.first][index.second];
     }
     

@@ -43,7 +43,6 @@ node* populate(concepts* data) {
                     }
 
                     current->children[child_index] = copy_node(current);
-                    current->children[child_index]->level++;
                     current->children[child_index]->table[avaliable_relationship.first][i] = avaliable_relationship.second;
                     
                     push(&queue, current->children[child_index++]);
@@ -58,7 +57,7 @@ node* populate(concepts* data) {
     return root;
 }
 
-void print(node* root, print_type type) {
+void print(node* root, concepts* data, print_type type) {
     node* current = root;
     linked_node* stack = NULL;
 
@@ -68,10 +67,10 @@ void print(node* root, print_type type) {
         current = pop(&stack);
 
         for (int i=0;i<current->level;i++) {
-            printf("\t");
+            printf("    ");
         }
 
-        print_node(current);
+        print_node(current, data);
         printf("\n");
 
         for (int i=0;i<current->children_size;i++) {
@@ -80,14 +79,20 @@ void print(node* root, print_type type) {
     }
 }
 
-void print_node(node* root) {
+void print_node(node* root, concepts* data) {
     for (int i=0;i<root->row_size;i++) {
         for (int j=0;j<root->col_size;j++) {
-            printf("%d ", root->table[i][j]);
+            pair t_pair;
+            t_pair.first = i;
+            t_pair.second = root->table[i][j];
+
+            char* str = string_from_index(t_pair, data);
+
+            printf("%s,", (str ? str : "[]"));
         }
+
         printf(" | ");
     }
-    printf("%d", root->children_size);
 }
 
 node* copy_node(node* src) {
@@ -100,7 +105,7 @@ node* copy_node(node* src) {
     dst->children = NULL;
     dst->row_size = src->row_size;
     dst->col_size = src->col_size;
-    dst->level = src->level;
+    dst->level = src->level + 1;
     dst->children_size = 0;
 
     dst->table = (int**)malloc(sizeof(int*) * dst->row_size);

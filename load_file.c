@@ -61,8 +61,15 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
 
             size_t len = strlen(temp);
 
+            if (temp[0] == '\n') {
+                for (int i = 0; i < len; i++) {
+                    temp[i] = temp[i+1];
+                }
+                --len;
+            }
+
             // copy the string and set null at the end
-            group[j] = (char*)malloc(sizeof(char) * (len+ 1));
+            group[j] = (char*)malloc(sizeof(char) * (len + 1));
             strcpy(group[j], temp);
             group[j][len] = '\0';
         }

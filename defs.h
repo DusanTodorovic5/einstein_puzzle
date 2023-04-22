@@ -163,11 +163,11 @@ node* populate(concepts* data);
 /// @brief Prints the tree from node given as root, either as horizontal(check windows TREE command) or vertically
 /// @param root Pointer to the first node to be printed
 /// @param type Printing type, horizontal or vertical
-void print(node* root, print_type type);
+void print(node* root, concepts* data, print_type type);
 
 /// @brief Prints the node in 1 line
 /// @param root node to be printed
-void print_node(node* root);
+void print_node(node* root, concepts* data);
 
 /// @brief Copies the given node and returns pointer to new node without copying the children
 /// @param src Node to be copied

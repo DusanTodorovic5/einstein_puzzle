@@ -14,7 +14,7 @@ int main(int, char**) {
    printf("\n");
 
    node* tree = populate(m_concepts);
-   print(tree, HORIZONTAL);
+   print(tree, m_concepts, HORIZONTAL);
    printf("\n\nkraj\n\n");
 
    return 0;
