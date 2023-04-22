@@ -61,6 +61,7 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
 
             size_t len = strlen(temp);
 
+            // remove new line if the string contains it
             if (temp[0] == '\n') {
                 for (int i = 0; i < len; i++) {
                     temp[i] = temp[i+1];

@@ -125,7 +125,8 @@ linked_relationship* get_avaliable_relationships(node* src, concepts* data) {
     for (int i = 1;i < data->number_of_groups;i++) {
         for (int j = 0;j < data->number_of_concepts;j++) {
             int found = 0;
-            for (int t = 0;t < src->row_size;t++) {
+
+            for (int t = 0;t < src->col_size;t++) {
                 if (src->table[i][t] == j) {
                     found = 1;
                     break;
