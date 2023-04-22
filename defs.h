@@ -57,7 +57,7 @@ typedef struct concepts_t {
 typedef struct node_t {
     unsigned char row_size;
     unsigned char col_size;
-    pair** table;
+    char** table;
     struct node_t** children; 
 } node;
 
