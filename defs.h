@@ -27,8 +27,8 @@ typedef enum print_type_e {
 
 /// @brief Simple utility structure containing two unsigned chars
 typedef struct pair_t {
-    unsigned char first;
-    unsigned char second;
+    char first;
+    char second;
 } pair;
 
 /// @brief Relationship type enumeratable
@@ -57,14 +57,25 @@ typedef struct concepts_t {
 typedef struct node_t {
     unsigned char row_size;
     unsigned char col_size;
+    unsigned char children_size;
     char** table;
     struct node_t** children; 
 } node;
 
+/// @brief Structure for linked list(stack and queue) for tree nodes
 typedef struct linked_node_t {
     node* data;
-    struct linked_node_t next;
+    struct linked_node_t* next;
 } linked_node;
+
+/// @brief Contains the queue of indexes for avaliable relationships
+typedef struct linked_relationship_t {
+    char row;
+    char col;
+    struct linked_relationship_t* next;
+} linked_relationship;
+
+
 
 /*
  *
@@ -158,6 +169,12 @@ void print(node* root, print_type type);
 /// @return Copied node
 node* copy_node(node* src);
 
+/// @brief Returns the pointer to all relationships avaliable for children of given node
+/// @param src Node for which we want to see avaliable relationships
+/// @param data Structure containing all the relationships
+/// @return Returns the list of avaliable relationships, that are not used already
+linked_relationship* get_avaliable_relationships(node* src, concepts* data);
+
 /*
  * 
  * LINKED LIST OPERATIONS
@@ -172,7 +189,7 @@ node* pop(linked_node** list);
 /// @brief Removes the last node in list, acts as queue
 /// @param list List on which the operation will be executed
 /// @return Returns the removed node
-node* remove(linked_node** list);
+node* pop_back(linked_node** list);
 
 /// @brief Pushes the node at the start of the list
 /// @param list List on which the operation will be executed
@@ -181,5 +198,16 @@ void push(linked_node** list, node* data);
 /// @brief Deletes the linked list and all of it nodes. Frees up memory
 /// @param list List on which the delete will be executed
 void delete(linked_node* list);
+
+/// @brief Pushes row and col to queue of indexes of relationships
+/// @param list List on which the action will be executed
+/// @param row Row
+/// @param col Col
+void push_relationship(linked_relationship** list, int row, int col);
+
+/// @brief Removes row and col from given queue and returns the values
+/// @param list List on which the action will be executed
+/// @return Returns the pair where first is row and second is col
+pair pop_relationship(linked_relationship** list);
 
 #endif

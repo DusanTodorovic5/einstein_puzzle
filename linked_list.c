@@ -14,7 +14,7 @@ node* pop(linked_node** list) {
     return ret_node;
 }
 
-node* remove(linked_node** list) {
+node* pop_back(linked_node** list) {
     if (list == NULL || (*list) == NULL) {
         return NULL;
     }
@@ -59,4 +59,35 @@ void delete(linked_node* list) {
         
         free(curr);
     }
+}
+
+void push_relationship(linked_relationship** list, int row, int col) {
+    if (list == NULL) {
+        return;
+    }
+
+    linked_relationship* new = (linked_relationship*)malloc(sizeof(linked_relationship));
+    new->row = row;
+    new->col = col;
+    new->next = (*list);
+    *list = new;
+}
+
+pair pop_relationship(linked_relationship** list) {
+    pair ret_index;
+    ret_index.first = ret_index.second = -1;
+    if (list == NULL || (*list) == NULL) {
+        return ret_index;
+    }
+
+    linked_relationship* first = *list;
+
+    pair ret_index;
+    ret_index.first = first->row;
+    ret_index.second = first->col;
+
+    *list = (*list)->next;
+    free(first);
+
+    return ret_index;
 }
