@@ -63,26 +63,26 @@ void delete(linked_node* list) {
     }
 }
 
-void push_relationship(linked_relationship** list, int row, int col) {
+void push_concept(linked_concept** list, int row, int col) {
     if (list == NULL) {
         return;
     }
 
-    linked_relationship* new = (linked_relationship*)malloc(sizeof(linked_relationship));
+    linked_concept* new = (linked_concept*)malloc(sizeof(linked_concept));
     new->row = row;
     new->col = col;
     new->next = (*list);
     *list = new;
 }
 
-pair pop_relationship(linked_relationship** list) {
+pair pop_concept(linked_concept** list) {
     pair ret_index;
     ret_index.first = ret_index.second = -1;
     if (list == NULL || (*list) == NULL) {
         return ret_index;
     }
 
-    linked_relationship* first = *list;
+    linked_concept* first = *list;
 
     ret_index.first = first->row;
     ret_index.second = first->col;

@@ -99,7 +99,8 @@ relationship* load_relationships(FILE* file_handle, concepts* data) {
 
     relationship* relationships = NULL;
 
-    for (int i=0;fscanf(file_handle, "%s %c %s", left, &symbol, right) != -1;i++) {
+    int i=0;
+    for (;fscanf(file_handle, "%s %c %s", left, &symbol, right) != -1;i++) {
         relationships = (relationship*)(relationships ?
             realloc(relationships, sizeof(relationship) * (i + 1)) :
             malloc(sizeof(relationship))
@@ -113,6 +114,11 @@ relationship* load_relationships(FILE* file_handle, concepts* data) {
             free(relationships);
             return NULL;
         }
+    }
+
+    if (relationships) {
+        relationships = (relationship*)realloc(relationships, sizeof(relationship) * (i + 1));
+        relationships[i].type = END;
     }
 
     return relationships;

@@ -12,6 +12,7 @@ node* populate(concepts* data) {
     current->row_size = data->number_of_groups;
     current->col_size = data->number_of_concepts;
     current->level = 0;
+
     // root table initialization
     for (int i=0;i<data->number_of_groups;i++) {
         current->table[i] = (int*)malloc(sizeof(int) * data->number_of_concepts);
@@ -28,30 +29,33 @@ node* populate(concepts* data) {
 
     linked_node* queue = NULL;
     do {
-        linked_relationship* relationships = get_avaliable_relationships(current, data);
+        linked_concept* avaliable_concepts = get_avaliable_concepts(current, data);
 
-        pair avaliable_relationship = pop_relationship(&relationships);
+        pair avaliable_concept = pop_concept(&avaliable_concepts);
 
-        int child_index = 0;
-        while (avaliable_relationship.first != -1) {
-            for (int i = 0;i < data->number_of_concepts;i++) {
-                if (current->table[avaliable_relationship.first][i] == -1) {
-                    if (current->children) {
-                        current->children = (node**)realloc(current->children, sizeof(node*) * (child_index + 1));
-                    } else {
-                        current->children = (node**)malloc(sizeof(node*));
+        if (can_continue(current, data)) {
+            int child_index = 0;
+            while (avaliable_concept.first != -1) {
+                for (int i = 0;i < data->number_of_concepts;i++) {
+                    if (current->table[avaliable_concept.first][i] == -1) {
+                        if (current->children) {
+                            current->children = (node**)realloc(current->children, sizeof(node*) * (child_index + 1));
+                        } else {
+                            current->children = (node**)malloc(sizeof(node*));
+                        }
+
+                        current->children[child_index] = copy_node(current);
+                        current->children[child_index]->level++;
+                        current->children[child_index]->table[avaliable_concept.first][i] = avaliable_concept.second;
+                        
+                        push(&queue, current->children[child_index++]);
                     }
-
-                    current->children[child_index] = copy_node(current);
-                    current->children[child_index]->table[avaliable_relationship.first][i] = avaliable_relationship.second;
-                    
-                    push(&queue, current->children[child_index++]);
                 }
-            }
 
-            avaliable_relationship = pop_relationship(&relationships);
+                avaliable_concept = pop_concept(&avaliable_concepts);
+            }
+            current->children_size = child_index;
         }
-        current->children_size = child_index;
     } while ((current = pop_back(&queue)));
 
     return root;
@@ -105,7 +109,7 @@ node* copy_node(node* src) {
     dst->children = NULL;
     dst->row_size = src->row_size;
     dst->col_size = src->col_size;
-    dst->level = src->level + 1;
+    dst->level = src->level;
     dst->children_size = 0;
 
     dst->table = (int**)malloc(sizeof(int*) * dst->row_size);
@@ -119,8 +123,8 @@ node* copy_node(node* src) {
 }
 
 
-linked_relationship* get_avaliable_relationships(node* src, concepts* data) {
-    linked_relationship* list = NULL;
+linked_concept* get_avaliable_concepts(node* src, concepts* data) {
+    linked_concept* list = NULL;
 
     for (int i = 1;i < data->number_of_groups;i++) {
         for (int j = 0;j < data->number_of_concepts;j++) {
@@ -134,10 +138,57 @@ linked_relationship* get_avaliable_relationships(node* src, concepts* data) {
             }
 
             if (!found) {
-                push_relationship(&list, i, j);
+                push_concept(&list, i, j);
             }
         }
     }
 
     return list;
+}
+
+
+int can_continue(node* src, concepts* data) {
+    if (data->relationships == NULL) {
+        return 1;
+    }
+
+    for (int i=0;data->relationships[i].type != END;i++) {
+        // for easier writings in code down below
+        relationship* rel = &(data->relationships[i]);
+        for (int i=0;i<src->col_size;i++) {
+            if (src->table[rel->left.first][i] != -1 && 
+                src->table[rel->right.first][i] != -1) {
+                switch (rel->type) {
+                    case PAIRED: 
+                        /*
+                        Here we check whether the right concept is in the same column as left concept
+                        or wise versa. If they are not, we return 0
+                        */ 
+                        if ((src->table[rel->left.first][i] == rel->left.second &&
+                            src->table[rel->right.first][i] != rel->right.second) || (
+                            src->table[rel->right.first][i] == rel->right.second &&
+                            src->table[rel->left.first][i] != rel->left.second)) {
+                            return 0;
+                        }
+                        break;
+                    case NOT_PAIRED: 
+                        /*
+                        here we check if left concept is in the same column as right concept,
+                        that means they are paired, and shouldn't be
+                        */
+                       if ((src->table[rel->left.first][i] == rel->left.second &&
+                            src->table[rel->right.first][i] == rel->right.second) || (
+                            src->table[rel->right.first][i] == rel->right.second &&
+                            src->table[rel->left.first][i] == rel->left.second)) {
+                            return 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    return 1;
 }

@@ -35,6 +35,7 @@ typedef struct pair_t {
 typedef enum relationship_type_t {
     PAIRED = 0,
     NOT_PAIRED,
+    END,
     UKNOWN
 } relationship_type;
 
@@ -70,11 +71,11 @@ typedef struct linked_node_t {
 } linked_node;
 
 /// @brief Contains the queue of indexes for avaliable relationships
-typedef struct linked_relationship_t {
+typedef struct linked_concept_t {
     int row;
     int col;
-    struct linked_relationship_t* next;
-} linked_relationship;
+    struct linked_concept_t* next;
+} linked_concept;
 
 
 
@@ -178,7 +179,13 @@ node* copy_node(node* src);
 /// @param src Node for which we want to see avaliable relationships
 /// @param data Structure containing all the relationships
 /// @return Returns the list of avaliable relationships, that are not used already
-linked_relationship* get_avaliable_relationships(node* src, concepts* data);
+linked_concept* get_avaliable_concepts(node* src, concepts* data);
+
+/// @brief Checks if the progress for a game can be continued from given node
+/// @param src Node to be checked
+/// @param data Concepts data on which the condition will be checked
+/// @return Returns 0 if the condition is not met or 1 if the condition is met
+int can_continue(node* src, concepts* data);
 
 /*
  * 
@@ -208,11 +215,11 @@ void delete(linked_node* list);
 /// @param list List on which the action will be executed
 /// @param row Row
 /// @param col Col
-void push_relationship(linked_relationship** list, int row, int col);
+void push_concept(linked_concept** list, int row, int col);
 
 /// @brief Removes row and col from given queue and returns the values
 /// @param list List on which the action will be executed
 /// @return Returns the pair where first is row and second is col
-pair pop_relationship(linked_relationship** list);
+pair pop_concept(linked_concept** list);
 
 #endif
