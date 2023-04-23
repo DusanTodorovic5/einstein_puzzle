@@ -187,6 +187,17 @@ linked_concept* get_avaliable_concepts(node* src, concepts* data);
 /// @return Returns 0 if the condition is not met or 1 if the condition is met
 int can_continue(node* src, concepts* data);
 
+/// @brief Checks whether the given node is a solution to the puzzle
+/// @param src Node to be checked
+/// @param data Concepts data on which the condition will be checked
+/// @return Returns 0 if the node is not solution, otherwise 1
+int is_solution(node* src, concepts* data);
+
+/// @brief Prints all the nodes that are solution
+/// @param root Root node of the tree to be printed
+/// @param data Concepts data on which the condition will be checked
+void print_solutions(node* root, concepts* data);
+
 /*
  * 
  * LINKED LIST OPERATIONS

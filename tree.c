@@ -148,7 +148,7 @@ linked_concept* get_avaliable_concepts(node* src, concepts* data) {
 
 
 int can_continue(node* src, concepts* data) {
-    if (data->relationships == NULL) {
+    if (data->relationships == NULL || src == NULL) {
         return 1;
     }
 
@@ -191,4 +191,77 @@ int can_continue(node* src, concepts* data) {
     }
 
     return 1;
+}
+
+int is_solution(node* src, concepts* data) {
+    if (data->relationships == NULL || src == NULL) {
+        return 0;
+    }
+
+    for (int i=0;data->relationships[i].type != END;i++) {
+        // for easier writings in code down below
+        relationship* rel = &(data->relationships[i]);
+        for (int i=0;i<src->col_size;i++) {
+            if (src->table[rel->left.first][i] != -1 && 
+                src->table[rel->right.first][i] != -1) {
+                switch (rel->type) {
+                    case PAIRED: 
+                        /*
+                        Here we check whether the right concept is in the same column as left concept
+                        or wise versa. If they are not, we return 0
+                        */ 
+                        if ((src->table[rel->left.first][i] == rel->left.second &&
+                            src->table[rel->right.first][i] != rel->right.second) || (
+                            src->table[rel->right.first][i] == rel->right.second &&
+                            src->table[rel->left.first][i] != rel->left.second)) {
+                            return 0;
+                        }
+                        break;
+                    case NOT_PAIRED: 
+                        /*
+                        here we check if left concept is in the same column as right concept,
+                        that means they are paired, and shouldn't be
+                        */
+                       if ((src->table[rel->left.first][i] == rel->left.second &&
+                            src->table[rel->right.first][i] == rel->right.second) || (
+                            src->table[rel->right.first][i] == rel->right.second &&
+                            src->table[rel->left.first][i] == rel->left.second)) {
+                            return 0;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    return 1;
+}
+
+
+void print_solutions(node* root, concepts* data) {
+    node* current = root;
+    linked_node* stack = NULL;
+
+    push(&stack, current);
+
+    while (stack) {
+        current = pop(&stack);
+
+        if (is_solution(current, data)) {
+            for (int i=0;i<current->level;i++) {
+                printf("    ");
+            }
+
+            print_node(current, data);
+            printf("\n");
+        }
+        
+        for (int i=0;i<current->children_size;i++) {
+            push(&stack, current->children[i]);
+        }
+    }
 }
