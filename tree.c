@@ -255,10 +255,6 @@ void print_solutions(node* root, concepts* data) {
         current = pop(&stack);
 
         if (is_solution(current, data)) {
-            for (int i=0;i<current->level;i++) {
-                printf("    ");
-            }
-
             print_node(current, data);
             printf("\n");
         }
