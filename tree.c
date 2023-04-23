@@ -29,11 +29,11 @@ node* populate(concepts* data) {
 
     linked_node* queue = NULL;
     do {
-        linked_concept* avaliable_concepts = get_avaliable_concepts(current, data);
-
-        pair avaliable_concept = pop_concept(&avaliable_concepts);
-
         if (can_continue(current, data)) {
+            linked_concept* avaliable_concepts = get_avaliable_concepts(current, data);
+
+            pair avaliable_concept = pop_concept(&avaliable_concepts);
+            
             int child_index = 0;
             while (avaliable_concept.first != -1) {
                 for (int i = 0;i < data->number_of_concepts;i++) {
@@ -54,6 +54,7 @@ node* populate(concepts* data) {
 
                 avaliable_concept = pop_concept(&avaliable_concepts);
             }
+
             current->children_size = child_index;
         }
     } while ((current = pop_back(&queue)));
@@ -81,6 +82,8 @@ void print(node* root, concepts* data, print_type type) {
             push(&stack, current->children[i]);
         }
     }
+
+    delete(stack);
 }
 
 void print_node(node* root, concepts* data) {
@@ -264,4 +267,31 @@ void print_solutions(node* root, concepts* data) {
             push(&stack, current->children[i]);
         }
     }
+}
+
+void cleanup_tree(node* root) {
+    node* current = root;
+    linked_node* stack = NULL;
+
+    push(&stack, current);
+    while (stack) {
+        current = pop(&stack);
+        
+        for (int i=0;i<current->children_size;i++) {
+            push(&stack, current->children[i]);
+        }
+
+        cleanup_node(current);
+        
+    }
+}
+
+void cleanup_node(node* src) {
+    for (int i=0;i<src->row_size;i++) {
+        free(src->table[i]);
+    }
+
+    free(src->table);
+    free(src->children);
+    free(src);
 }

@@ -115,6 +115,10 @@ char*** load_concepts(int number_of_groups, int number_per_group, FILE* file_han
 /// @return Returns NULL in case of an error, otherwise it returns array of relationships that is NULL terminated
 relationship* load_relationships(FILE* file_handle, concepts* data);
 
+/// @brief Deletes the allocated memory from tree
+/// @param data Concepts to be deleted
+void cleanup_concepts(concepts* data);
+
 
 /*
  *
@@ -197,6 +201,14 @@ int is_solution(node* src, concepts* data);
 /// @param root Root node of the tree to be printed
 /// @param data Concepts data on which the condition will be checked
 void print_solutions(node* root, concepts* data);
+
+/// @brief Deletes the allocated memory from tree
+/// @param root Root of a tree to delete
+void cleanup_tree(node* root);
+
+/// @brief Deletes the allocated memory from node
+/// @param src Node to be deleted
+void cleanup_node(node* src);
 
 /*
  * 

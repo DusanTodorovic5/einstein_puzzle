@@ -123,3 +123,16 @@ relationship* load_relationships(FILE* file_handle, concepts* data) {
 
     return relationships;
 }
+
+void cleanup_concepts(concepts* data) {
+    for (int i=0;i<data->number_of_groups;i++) {
+        for (int j=0;j<data->number_of_concepts;j++) {
+            free(data->concepts[i][j]);
+        }
+        
+        free(data->concepts[i]);
+    }
+
+    free(data->concepts);
+    free(data->relationships);
+}

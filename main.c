@@ -17,5 +17,10 @@ int main(int, char**) {
    print(tree, m_concepts, HORIZONTAL);
    printf("\n\nkraj\n\n");
 
+   cleanup_concepts(m_concepts);
+   free(m_concepts);
+   
+   cleanup_tree(tree);
+
    return 0;
 }
